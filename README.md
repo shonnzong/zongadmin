@@ -1,8 +1,8 @@
-#介绍
+## **介绍**
 
 ZongAdmin是一款基于ThinkPHP5.1+FastAdmin的极速后台开发框架。
 
-**数据库规范**
+### **数据库规范**
 
 - 明确字段是否是NOT NULL的，如果是NOT NULL，就不用设置默认值了，除非真的需要，如果是可以为NULL，请设置成NOT NULL并添加默认值。
 
