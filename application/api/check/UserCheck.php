@@ -6,13 +6,13 @@
  * Time: 16:07
  */
 
-namespace app\api\controller\validate;
+namespace app\api\check;
 
 
 use app\common\controller\Api;
 use app\common\model\User;
 
-class Validate extends Api
+class UserCheck extends Api
 {
     protected $noNeedLogin = '*';
     protected $layout = '';
