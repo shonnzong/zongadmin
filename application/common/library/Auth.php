@@ -150,6 +150,7 @@ class Auth
             'level'    => 1,
             'score'    => 0,
             'avatar'   => '',
+            'group_id' => 1,
         ];
         $params             = array_merge($data, [
             'nickname'  => $username,
@@ -176,7 +177,7 @@ class Auth
             Token::set($this->_token, $user->id, $this->keeptime);
 
             //注册成功的事件
-            Hook::listen("user_register_successed", $this->_user, $data);
+            Hook::listen("user_register_successed", $this->_user, true);
             Db::commit();
         } catch (Exception $e) {
             $this->setError($e->getMessage());
