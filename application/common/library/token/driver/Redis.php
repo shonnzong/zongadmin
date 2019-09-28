@@ -104,7 +104,7 @@ class Redis extends Driver
      * @param   string $token
      * @return  array
      */
-    public function get($token)
+    public function get($token,$default)
     {
         $key   = $this->getEncryptedToken($token);
         $value = $this->handler->get($key);
@@ -129,7 +129,7 @@ class Redis extends Driver
      */
     public function check($token, $user_id)
     {
-        $data = self::get($token);
+        $data = self::get($token,false);
         return $data && $data['user_id'] == $user_id ? true : false;
     }
 
@@ -140,7 +140,7 @@ class Redis extends Driver
      */
     public function delete($token)
     {
-        $data = $this->get($token);
+        $data = $this->get($token,false);
         if ($data) {
             $key     = $this->getEncryptedToken($token);
             $user_id = $data['user_id'];

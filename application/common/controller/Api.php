@@ -15,7 +15,7 @@ use think\facade\Config;
 use think\facade\Env;
 use think\facade\Hook;
 use think\facade\Lang;
-use think\facade\Request;
+use think\Request;
 use think\facade\Response;
 
 class Api
@@ -74,7 +74,7 @@ class Api
      */
     public function __construct(Request $request = null)
     {
-        $this->request = is_null($request) ? Request::instance() : $request;
+        $this->request = is_null($request) ? \think\facade\Request::instance() : $request;
 
         // 控制器初始化
         $this->_initialize();
@@ -110,21 +110,21 @@ class Api
         }
 
         //移除HTML标签
-        Request::filter('trim,strip_tags,htmlspecialchars');
+        $this->request->filter('trim,strip_tags,htmlspecialchars');
 
         // 获取 POST JSON 并自动转换为数组
-        $this->post_data = Request::put();
+        $this->post_data = $this->request->put();
         // 获取 GET JSON 并自动转换为数组
-        $this->get_data = Request::get();
+        $this->get_data = $this->request->get();
 
         $this->auth = Auth::instance();
 
-        $modulename     = Request::module();
-        $controllername = strtolower(Request::controller());
-        $actionname     = strtolower(Request::action());
+        $modulename     = $this->request->module();
+        $controllername = strtolower($this->request->controller());
+        $actionname     = strtolower($this->request->action());
 
         // token
-        $token = Request::server('HTTP_TOKEN', Request::request('token', \think\facade\Cookie::get('token')));
+        $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\facade\Cookie::get('token')));
 
         $path = str_replace('.', '/', $controllername) . '/' . $actionname;
         // 设置当前请求的URI
@@ -159,16 +159,16 @@ class Api
         Config::set('upload', array_merge(Config::get('upload.'), $upload));
 
         // 加载当前控制器语言包
-        $this->loadlang($controllername);
+        $this->loadLang($controllername);
     }
 
     /**
      * 加载语言文件
      * @param string $name
      */
-    protected function loadlang($name)
+    protected function loadLang($name)
     {
-        Lang::load(Env::get('APP_PATH') . Request::module() . '/lang/' . Request::langset() . '/' . str_replace('.', '/', $name) . '.php');
+        Lang::load(Env::get('APP_PATH') . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
     /**
@@ -213,11 +213,11 @@ class Api
         $result = [
             'code' => $code,
             'msg'  => $msg,
-            'time' => Request::instance()->server('REQUEST_TIME'),
+            'time' => \think\facade\Request::instance()->server('REQUEST_TIME'),
             'data' => $data,
         ];
         // 如果未设置类型则自动判断
-        $type = $type ? $type : (Request::param(config('var_jsonp_handler')) ? 'jsonp' : $this->responseType);
+        $type = $type ? $type : ($this->request->param(config('var_jsonp_handler')) ? 'jsonp' : $this->responseType);
 
         if (isset($header['statuscode'])) {
             $code = $header['statuscode'];

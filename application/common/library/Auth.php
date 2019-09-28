@@ -368,7 +368,7 @@ class Auth
     /**
      * 获取会员基本信息
      */
-    public function getUserinfo()
+    public function getUserInfo()
     {
         $data        = $this->_user->toArray();
         $allowFields = $this->getAllowFields();

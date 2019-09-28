@@ -83,7 +83,7 @@ class Mysql extends Driver
      */
     public function check($token, $user_id)
     {
-        $data = $this->get($token);
+        $data = $this->get($token,false);
         return $data && $data['user_id'] == $user_id ? true : false;
     }
 

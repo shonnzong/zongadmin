@@ -11,10 +11,10 @@ class User extends Model
 {
 
     // 开启自动写入时间戳字段
-    protected $autoWriteTimestamp = 'int';
+    protected $autoWriteTimestamp = 'timestamp';
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'gmt_create';
+    protected $updateTime = 'gmt_modified';
     // 追加属性
     protected $append = [
         'url',
@@ -110,7 +110,7 @@ class User extends Model
         if ($user && $score != 0) {
             $before = $user->score;
             $after = $user->score + $score;
-            $level = self::nextlevel($after);
+            $level = self::nextLevel($after);
             //更新会员信息
             $user->save(['score' => $after, 'level' => $level]);
             //写入日志
@@ -123,7 +123,7 @@ class User extends Model
      * @param int $score 积分
      * @return int
      */
-    public static function nextlevel($score = 0)
+    public static function nextLevel($score = 0)
     {
         $lv = array(1 => 0, 2 => 30, 3 => 100, 4 => 500, 5 => 1000, 6 => 2000, 7 => 3000, 8 => 5000, 9 => 8000, 10 => 10000);
         $level = 1;
