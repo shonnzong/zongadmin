@@ -15,4 +15,3 @@ ZongAdmin是一款基于ThinkPHP5.1+FastAdmin的极速后台开发框架。
 - 类似is_del，store_id等常用查询的字段，且必须建Index索引。
 
 - 对于存储URL的字段，必须采用VARCHAR类型，建议长度：2048——8192。
-
