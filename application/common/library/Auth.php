@@ -373,9 +373,9 @@ class Auth
     {
         $data        = $this->_user->toArray();
         $allowFields = $this->getAllowFields();
-        $userinfo    = array_intersect_key($data, array_flip($allowFields));
-        $userinfo    = array_merge($userinfo, Token::get($this->_token));
-        return $userinfo;
+        $userInfo    = array_intersect_key($data, array_flip($allowFields));
+        $userInfo    = array_merge($userInfo, Token::get($this->_token));
+        return $userInfo;
     }
 
     /**
@@ -527,8 +527,8 @@ class Auth
                 $fields[] = 'id';
             }
             $ids        = array_unique($ids);
-            $selectlist = User::where('id', 'in', $ids)->column($fields);
-            foreach ($selectlist as $k => $v) {
+            $selectList = User::where('id', 'in', $ids)->column($fields);
+            foreach ($selectList as $k => $v) {
                 $list[$v['id']] = $v;
             }
         }

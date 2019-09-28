@@ -119,14 +119,14 @@ class Api
 
         $this->auth = Auth::instance();
 
-        $modulename     = $this->request->module();
-        $controllername = strtolower($this->request->controller());
-        $actionname     = strtolower($this->request->action());
+        $moduleName     = $this->request->module();
+        $controllerName = strtolower($this->request->controller());
+        $actionName     = strtolower($this->request->action());
 
         // token
         $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\facade\Cookie::get('token')));
 
-        $path = str_replace('.', '/', $controllername) . '/' . $actionname;
+        $path = str_replace('.', '/', $controllerName) . '/' . $actionName;
         // 设置当前请求的URI
         $this->auth->setRequestUri($path);
         // 检测是否需要验证登录
@@ -159,7 +159,7 @@ class Api
         Config::set('upload', array_merge(Config::get('upload.'), $upload));
 
         // 加载当前控制器语言包
-        $this->loadLang($controllername);
+        $this->loadLang($controllerName);
     }
 
     /**
