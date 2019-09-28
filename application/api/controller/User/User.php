@@ -129,8 +129,8 @@ class User extends Api
         $user     = $this->auth->getUser();
         $username = $this->request->post('username');
         $nickname = $this->request->post('nickname');
-        //        $bio      = $this->request->post('bio');
-        $avatar = $this->request->post('avatar', '', 'trim,strip_tags,htmlspecialchars');
+        $bio      = $this->request->post('bio');
+        $avatar   = $this->request->post('avatar', '', 'trim,strip_tags,htmlspecialchars');
         if ($username) {
             $exists = \app\common\model\User::where('username', $username)->where('id', '<>', $this->auth->id)->find();
             if ($exists) {
@@ -139,10 +139,10 @@ class User extends Api
             $user->username = $username;
         }
         $user->nickname = $nickname;
-        //        $user->bio      = $bio;
-        $user->avatar = $avatar;
+        $user->bio      = $bio;
+        $user->avatar   = $avatar;
         $user->save();
-        $this->success();
+        $this->success('修改会员个人信息成功');
     }
 
     /**
@@ -154,12 +154,13 @@ class User extends Api
      */
     public function resetPwd()
     {
-        $type        = $this->request->request("type");
-        $mobile      = $this->request->request("mobile");
-        $email       = $this->request->request("email");
-        $newpassword = $this->request->request("newpassword");
-        $captcha     = $this->request->request("captcha");
-        if (!$newpassword || !$captcha) {
+        $type        = $this->request->post("type");
+        $mobile      = $this->request->post("mobile");
+        $email       = $this->request->post("email");
+        $newPassword = $this->request->post("newPassword");
+//        $captcha     = $this->request->post("captcha");
+//        if (!$newPassword || !$captcha) {
+        if (!$newPassword) {
             $this->error(__('Invalid parameters'));
         }
         if ($type == 'mobile') {
@@ -170,11 +171,11 @@ class User extends Api
             if (!$user) {
                 $this->error(__('User not found'));
             }
-            $ret = Sms::check($mobile, $captcha, 'resetpwd');
-            if (!$ret) {
-                $this->error(__('Captcha is incorrect'));
-            }
-            Sms::flush($mobile, 'resetpwd');
+//            $ret = Sms::check($mobile, $captcha, 'resetpwd');
+//            if (!$ret) {
+//                $this->error(__('Captcha is incorrect'));
+//            }
+//            Sms::flush($mobile, 'resetpwd');
         } else {
             if (!Validate::is($email, "email")) {
                 $this->error(__('Email is incorrect'));
@@ -183,15 +184,15 @@ class User extends Api
             if (!$user) {
                 $this->error(__('User not found'));
             }
-            $ret = Ems::check($email, $captcha, 'resetpwd');
-            if (!$ret) {
-                $this->error(__('Captcha is incorrect'));
-            }
-            Ems::flush($email, 'resetpwd');
+//            $ret = Ems::check($email, $captcha, 'resetpwd');
+//            if (!$ret) {
+//                $this->error(__('Captcha is incorrect'));
+//            }
+//            Ems::flush($email, 'resetpwd');
         }
         //模拟一次登录
         $this->auth->direct($user->id);
-        $ret = $this->auth->changepwd($newpassword, '', true);
+        $ret = $this->auth->changePwd($newPassword, '', true);
         if ($ret) {
             $this->success(__('Reset password successful'));
         } else {

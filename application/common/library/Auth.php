@@ -245,19 +245,19 @@ class Auth
      * @param bool $ignoreoldpassword 忽略旧密码
      * @return boolean
      */
-    public function changepwd($newpassword, $oldpassword = '', $ignoreoldpassword = false)
+    public function changePwd($newPassword, $oldPassword = '', $ignoreoldPassword = false)
     {
         if (!$this->_logined) {
             $this->setError('You are not logged in');
             return false;
         }
         //判断旧密码是否正确
-        if ($this->_user->password == $this->getEncryptPassword($oldpassword, $this->_user->salt) || $ignoreoldpassword) {
+        if ($this->_user->password == $this->getEncryptPassword($oldPassword, $this->_user->salt) || $ignoreoldPassword) {
             Db::startTrans();
             try {
                 $salt        = Random::alnum();
-                $newpassword = $this->getEncryptPassword($newpassword, $salt);
-                $this->_user->save(['password' => $newpassword, 'salt' => $salt]);
+                $newPassword = $this->getEncryptPassword($newPassword, $salt);
+                $this->_user->save(['password' => $newPassword, 'salt' => $salt]);
 
                 Token::delete($this->_token);
                 //修改密码成功的事件
